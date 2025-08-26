@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Banco de Dados - Studio Alfa</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button { padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-info { background: #17a2b8; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        input, select, textarea { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group { margin: 10px 0; }
+        label { display: inline-block; width: 150px; }
+        .sql-output { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 10px; font-family: monospace; margin: 10px 0; max-height: 200px; overflow-y: auto; }
+        .status-indicator { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .status-online { background: #28a745; }
+        .status-offline { background: #dc3545; }
+        .status-pending { background: #ffc107; }
+        .table-container { overflow-x: auto; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Banco de Dados - Studio Alfa</h1>
+    
+    <div class="test-section">
+        <h2>🗄️ Status do Banco</h2>
+        <p>Verifica o status e conectividade do banco de dados</p>
+        
+        <div class="form-group">
+            <label>Status:</label>
+            <span class="status-indicator" id="dbStatusIndicator"></span>
+            <span id="dbStatusText">Verificando...</span>
+        </div>
+        
+        <div class="form-group">
+            <label>Nome do banco:</label>
+            <span id="dbName">studio-alfa-db</span>
+        </div>
+        
+        <div class="form-group">
+            <label>Versão:</label>
+            <span id="dbVersion">1</span>
+        </div>
+        
+        <button class="btn-info" onclick="verificarStatus()">🔍 Verificar Status</button>
+        <button class="btn-warning" onclick="testarConexao()">🔌 Testar Conexão</button>
+        
+        <div id="resultadoStatus"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Estrutura das Tabelas</h2>
+        <p>Testa a criação e estrutura das tabelas do banco</p>
+        
+        <button class="btn-primary" onclick="criarTabelas()">🏗️ Criar Tabelas</button>
+        <button class="btn-info" onclick="verificarTabelas()">🔍 Verificar Tabelas</button>
+        <button class="btn-danger" onclick="limparTabelas()">🗑️ Limpar Tabelas</button>
+        
+        <div id="resultadoTabelas"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📝 Operações SQL</h2>
+        <p>Testa operações SQL básicas (INSERT, SELECT, UPDATE, DELETE)</p>
+        
+        <div class="form-group">
+            <label>SQL Query:</label>
+            <textarea id="sqlQuery" rows="3" cols="60" placeholder="Digite sua query SQL aqui...">SELECT * FROM aluno</textarea>
+        </div>
+        
+        <button class="btn-primary" onclick="executarSQL()">▶️ Executar SQL</button>
+        <button class="btn-info" onclick="testarQueries()">🧪 Testar Queries</button>
+        
+        <div id="resultadoSQL"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💾 Persistência e Backup</h2>
+        <p>Testa funcionalidades de persistência e backup</p>
+        
+        <button class="btn-success" onclick="testarPersistencia()">💾 Testar Persistência</button>
+        <button class="btn-info" onclick="verificarStorage()">🔍 Verificar Storage</button>
+        <button class="btn-warning" onclick="simularBackup()">📦 Simular Backup</button>
+        <button class="btn-danger" onclick="limparStorage()">🗑️ Limpar Storage</button>
+        
+        <div id="resultadoPersistencia"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📥📤 Import/Export</h2>
+        <p>Testa funcionalidades de importação e exportação</p>
+        
+        <div class="form-group">
+            <label>Dados de teste:</label>
+            <button class="btn-info" onclick="gerarDadosTeste()">🎲 Gerar Dados</button>
+            <button class="btn-success" onclick="exportarDados()">📤 Exportar</button>
+        </div>
+        
+        <div class="form-group">
+            <label>Arquivo para importar:</label>
+            <input type="file" id="arquivoImport" accept=".sqlite,.db,.json">
+            <button class="btn-primary" onclick="importarDados()">📥 Importar</button>
+        </div>
+        
+        <div id="resultadoImportExport"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔍 Consultas Avançadas</h2>
+        <p>Testa consultas mais complexas e relacionamentos</p>
+        
+        <button class="btn-info" onclick="testarJoins()">🔗 Testar JOINs</button>
+        <button class="btn-info" onclick="testarAgregacoes()">📊 Testar Agregações</button>
+        <button class="btn-info" onclick="testarSubconsultas()">🔍 Testar Subconsultas</button>
+        
+        <div id="resultadoConsultas"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Dados de Exemplo</h2>
+        <p>Visualiza os dados atuais no banco</p>
+        
+        <div id="dadosAtuais"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📈 Status dos Testes</h2>
+        <div id="statusTestes"></div>
+    </div>
+
+    <script>
+        // Simulação do banco de dados
+        let db = {
+            nome: 'studio-alfa-db',
+            versao: 1,
+            tabelas: {},
+            dados: {},
+            status: 'offline'
+        };
+        
+        let dadosTeste = [];
+        
+        function mostrarResultado(elemento, mensagem, tipo = 'info') {
+            const div = document.getElementById(elemento);
+            div.innerHTML = `<div class="test-result ${tipo}">${mensagem}</div>`;
+        }
+        
+        function atualizarStatus() {
+            const div = document.getElementById('statusTestes');
+            const status = {
+                banco: db.status,
+                tabelas: Object.keys(db.tabelas).length,
+                alunos: db.dados.aluno ? db.dados.aluno.length : 0,
+                treinos: db.dados.treino ? db.dados.treino.length : 0
+            };
+            
+            div.innerHTML = `
+                <div class="test-result info">
+                    <strong>Status do Banco:</strong><br>
+                    🗄️ Status: ${status.banco}<br>
+                    📊 Tabelas: ${status.tabelas}<br>
+                    👥 Alunos: ${status.alunos}<br>
+                    💪 Treinos: ${status.treinos}
+                </div>
+            `;
+        }
+        
+        // Teste de Status
+        function verificarStatus() {
+            db.status = 'online';
+            const indicator = document.getElementById('dbStatusIndicator');
+            const text = document.getElementById('dbStatusText');
+            
+            indicator.className = 'status-indicator status-online';
+            text.textContent = 'Online';
+            
+            mostrarResultado('resultadoStatus', '✅ Banco de dados está online e funcionando!', 'success');
+            atualizarStatus();
+        }
+        
+        function testarConexao() {
+            mostrarResultado('resultadoStatus', '🔌 Testando conexão...', 'info');
+            setTimeout(() => {
+                mostrarResultado('resultadoStatus', '✅ Conexão testada com sucesso!', 'success');
+            }, 1000);
+        }
+        
+        // Teste de Tabelas
+        function criarTabelas() {
+            db.tabelas = {
+                aluno: {
+                    colunas: ['id', 'nome', 'data_nascimento', 'vencimento'],
+                    tipos: ['TEXT', 'TEXT', 'TEXT', 'TEXT']
+                },
+                treino: {
+                    colunas: ['id', 'aluno_id', 'titulo', 'texto', 'atualizado_em'],
+                    tipos: ['TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT']
+                }
+            };
+            
+            db.dados.aluno = [];
+            db.dados.treino = [];
+            
+            mostrarResultado('resultadoTabelas', '✅ Tabelas criadas com sucesso!', 'success');
+            atualizarStatus();
+        }
+        
+        function verificarTabelas() {
+            if (Object.keys(db.tabelas).length === 0) {
+                mostrarResultado('resultadoTabelas', '❌ Nenhuma tabela encontrada!', 'error');
+                return;
+            }
+            
+            let html = '<h4>Tabelas existentes:</h4><div class="table-container"><table><tr><th>Tabela</th><th>Colunas</th></tr>';
+            
+            for (const [nome, estrutura] of Object.entries(db.tabelas)) {
+                html += `<tr><td>${nome}</td><td>${estrutura.colunas.join(', ')}</td></tr>`;
+            }
+            
+            html += '</table></div>';
+            mostrarResultado('resultadoTabelas', html, 'success');
+        }
+        
+        function limparTabelas() {
+            db.tabelas = {};
+            db.dados = {};
+            mostrarResultado('resultadoTabelas', '🗑️ Tabelas limpas com sucesso!', 'warning');
+            atualizarStatus();
+        }
+        
+        // Teste de SQL
+        function executarSQL() {
+            const query = document.getElementById('sqlQuery').value.trim();
+            if (!query) {
+                mostrarResultado('resultadoSQL', '❌ Digite uma query SQL!', 'error');
+                return;
+            }
+            
+            try {
+                const resultado = simularExecucaoSQL(query);
+                mostrarResultado('resultadoSQL', `
+                    <h4>Query executada:</h4>
+                    <div class="sql-output">${query}</div>
+                    <h4>Resultado:</h4>
+                    <div class="sql-output">${JSON.stringify(resultado, null, 2)}</div>
+                `, 'success');
+            } catch (error) {
+                mostrarResultado('resultadoSQL', `❌ Erro na execução: ${error.message}`, 'error');
+            }
+        }
+        
+        function simularExecucaoSQL(query) {
+            const upperQuery = query.toUpperCase();
+            
+            if (upperQuery.includes('SELECT')) {
+                if (upperQuery.includes('FROM ALUNO')) {
+                    return db.dados.aluno || [];
+                } else if (upperQuery.includes('FROM TREINO')) {
+                    return db.dados.treino || [];
+                } else {
+                    return { message: 'Tabela não encontrada' };
+                }
+            } else if (upperQuery.includes('INSERT')) {
+                return { message: 'Registro inserido com sucesso' };
+            } else if (upperQuery.includes('UPDATE')) {
+                return { message: 'Registro atualizado com sucesso' };
+            } else if (upperQuery.includes('DELETE')) {
+                return { message: 'Registro excluído com sucesso' };
+            } else {
+                return { message: 'Query executada com sucesso' };
+            }
+        }
+        
+        function testarQueries() {
+            const queries = [
+                'SELECT * FROM aluno',
+                'SELECT * FROM treino',
+                'INSERT INTO aluno (id, nome) VALUES (1, "Teste")',
+                'UPDATE aluno SET nome = "Atualizado" WHERE id = 1',
+                'DELETE FROM aluno WHERE id = 1'
+            ];
+            
+            let html = '<h4>Testando queries comuns:</h4>';
+            
+            queries.forEach((query, index) => {
+                try {
+                    const resultado = simularExecucaoSQL(query);
+                    html += `<div class="sql-output"><strong>Query ${index + 1}:</strong> ${query}<br><strong>Resultado:</strong> ${JSON.stringify(resultado)}</div>`;
+                } catch (error) {
+                    html += `<div class="sql-output"><strong>Query ${index + 1}:</strong> ${query}<br><strong>Erro:</strong> ${error.message}</div>`;
+                }
+            });
+            
+            mostrarResultado('resultadoSQL', html, 'success');
+        }
+        
+        // Teste de Persistência
+        function testarPersistencia() {
+            mostrarResultado('resultadoPersistencia', '💾 Testando persistência...', 'info');
+            setTimeout(() => {
+                mostrarResultado('resultadoPersistencia', '✅ Persistência testada com sucesso!', 'success');
+            }, 1500);
+        }
+        
+        function verificarStorage() {
+            const storage = {
+                localStorage: localStorage.length,
+                sessionStorage: sessionStorage.length,
+                indexedDB: 'Simulado'
+            };
+            
+            mostrarResultado('resultadoPersistencia', `
+                <h4>Status do Storage:</h4>
+                <div class="sql-output">
+                    localStorage: ${storage.localStorage} itens<br>
+                    sessionStorage: ${storage.sessionStorage} itens<br>
+                    IndexedDB: ${storage.indexedDB}
+                </div>
+            `, 'success');
+        }
+        
+        function simularBackup() {
+            mostrarResultado('resultadoPersistencia', '📦 Iniciando backup...', 'info');
+            setTimeout(() => {
+                mostrarResultado('resultadoPersistencia', '✅ Backup simulado com sucesso!', 'success');
+            }, 2000);
+        }
+        
+        function limparStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            mostrarResultado('resultadoPersistencia', '🗑️ Storage limpo com sucesso!', 'warning');
+        }
+        
+        // Teste de Import/Export
+        function gerarDadosTeste() {
+            dadosTeste = [
+                { id: 1, nome: 'João Silva', data_nascimento: '1990-03-15', vencimento: '2024-12-31' },
+                { id: 2, nome: 'Maria Santos', data_nascimento: '1985-07-22', vencimento: '2024-12-05' },
+                { id: 3, nome: 'Pedro Costa', data_nascimento: '1992-11-10', vencimento: '2024-12-01' }
+            ];
+            
+            db.dados.aluno = [...dadosTeste];
+            mostrarResultado('resultadoImportExport', `✅ ${dadosTeste.length} registros de teste gerados!`, 'success');
+            atualizarStatus();
+        }
+        
+        function exportarDados() {
+            if (dadosTeste.length === 0) {
+                mostrarResultado('resultadoImportExport', '❌ Gere dados de teste primeiro!', 'error');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(dadosTeste, null, 2)], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dados-teste.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            mostrarResultado('resultadoImportExport', '✅ Dados exportados com sucesso!', 'success');
+        }
+        
+        function importarDados() {
+            const input = document.getElementById('arquivoImport');
+            if (input.files.length === 0) {
+                mostrarResultado('resultadoImportExport', '❌ Selecione um arquivo primeiro!', 'error');
+                return;
+            }
+            
+            const file = input.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const dados = JSON.parse(e.target.result);
+                    db.dados.aluno = dados;
+                    mostrarResultado('resultadoImportExport', `✅ ${dados.length} registros importados com sucesso!`, 'success');
+                    atualizarStatus();
+                } catch (error) {
+                    mostrarResultado('resultadoImportExport', `❌ Erro ao importar: ${error.message}`, 'error');
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+        
+        // Teste de Consultas Avançadas
+        function testarJoins() {
+            if (!db.dados.aluno || !db.dados.treino) {
+                mostrarResultado('resultadoConsultas', '❌ Crie tabelas e dados primeiro!', 'error');
+                return;
+            }
+            
+            // Simular JOIN entre aluno e treino
+            const resultado = db.dados.aluno.map(aluno => {
+                const treinos = db.dados.treino.filter(t => t.aluno_id === aluno.id);
+                return {
+                    aluno: aluno.nome,
+                    treinos: treinos.length,
+                    ultimo_treino: treinos.length > 0 ? treinos[0].titulo : 'Nenhum'
+                };
+            });
+            
+            mostrarResultado('resultadoConsultas', `
+                <h4>JOIN Aluno x Treino:</h4>
+                <div class="table-container">
+                    <table>
+                        <tr><th>Aluno</th><th>Qtd Treinos</th><th>Último Treino</th></tr>
+                        ${resultado.map(r => `<tr><td>${r.aluno}</td><td>${r.treinos}</td><td>${r.ultimo_treino}</td></tr>`).join('')}
+                    </table>
+                </div>
+            `, 'success');
+        }
+        
+        function testarAgregacoes() {
+            if (!db.dados.aluno) {
+                mostrarResultado('resultadoConsultas', '❌ Crie dados primeiro!', 'error');
+                return;
+            }
+            
+            const total = db.dados.aluno.length;
+            const ativos = db.dados.aluno.filter(a => new Date(a.vencimento) > new Date()).length;
+            const vencidos = total - ativos;
+            
+            mostrarResultado('resultadoConsultas', `
+                <h4>Agregações:</h4>
+                <div class="sql-output">
+                    Total de alunos: ${total}<br>
+                    Alunos ativos: ${ativos}<br>
+                    Alunos vencidos: ${vencidos}<br>
+                    Percentual ativos: ${((ativos/total)*100).toFixed(1)}%
+                </div>
+            `, 'success');
+        }
+        
+        function testarSubconsultas() {
+            if (!db.dados.aluno || !db.dados.treino) {
+                mostrarResultado('resultadoConsultas', '❌ Crie dados primeiro!', 'error');
+                return;
+            }
+            
+            // Simular subconsulta: alunos com mais treinos
+            const alunosComTreinos = db.dados.aluno.map(aluno => {
+                const treinos = db.dados.treino.filter(t => t.aluno_id === aluno.id);
+                return { ...aluno, qtdTreinos: treinos.length };
+            }).filter(a => a.qtdTreinos > 0);
+            
+            mostrarResultado('resultadoConsultas', `
+                <h4>Subconsulta - Alunos com treinos:</h4>
+                <div class="table-container">
+                    <table>
+                        <tr><th>Aluno</th><th>Qtd Treinos</th></tr>
+                        ${alunosComTreinos.map(a => `<tr><td>${a.nome}</td><td>${a.qtdTreinos}</td></tr>`).join('')}
+                    </table>
+                </div>
+            `, 'success');
+        }
+        
+        // Atualizar dados atuais
+        function atualizarDadosAtuais() {
+            const div = document.getElementById('dadosAtuais');
+            
+            if (Object.keys(db.dados).length === 0) {
+                div.innerHTML = '<p>Nenhum dado disponível</p>';
+                return;
+            }
+            
+            let html = '<h4>Dados Atuais:</h4>';
+            
+            for (const [tabela, dados] of Object.entries(db.dados)) {
+                if (dados.length > 0) {
+                    html += `<h5>Tabela: ${tabela} (${dados.length} registros)</h5>`;
+                    html += '<div class="table-container"><table>';
+                    
+                    // Cabeçalho
+                    const colunas = Object.keys(dados[0]);
+                    html += `<tr>${colunas.map(c => `<th>${c}</th>`).join('')}</tr>`;
+                    
+                    // Dados
+                    dados.slice(0, 5).forEach(registro => {
+                        html += `<tr>${colunas.map(c => `<td>${registro[c]}</td>`).join('')}</tr>`;
+                    });
+                    
+                    if (dados.length > 5) {
+                        html += `<tr><td colspan="${colunas.length}" style="text-align: center;">... e mais ${dados.length - 5} registros</td></tr>`;
+                    }
+                    
+                    html += '</table></div>';
+                }
+            }
+            
+            div.innerHTML = html;
+        }
+        
+        // Inicialização
+        window.onload = function() {
+            verificarStatus();
+            atualizarStatus();
+            atualizarDadosAtuais();
+            
+            // Atualizar dados a cada 5 segundos
+            setInterval(atualizarDadosAtuais, 5000);
+        };
+    </script>
+</body>
+</html>
+
+

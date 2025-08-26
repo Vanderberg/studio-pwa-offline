@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Studio Alfa</title>
+  <link rel="manifest" href="manifest.json" />
+  <link id="favicon" rel="icon" href="assets/icons/icon-192.png" />
+  <meta name="theme-color" content="#0b1224" />
+  <link rel="stylesheet" href="src/css/styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="brand">
+      <img id="logoImg" src="assets/icons/icon-192.png" alt="Logo Studio Alfa" />
+      <h1>Studio Alfa</h1>
+    </div>
+
+    <div class="header-actions">
+      <select id="themeSelect" title="Tema">
+        <option value="light">Claro</option>
+        <option value="dark">Escuro</option>
+      </select>
+
+      <div class="menu">
+        <button id="menuToggle" aria-haspopup="true" aria-expanded="false" aria-controls="menuDropdown">☰ Menu</button>
+        <div id="menuDropdown" class="dropdown" hidden>
+          <button id="menuLogo">Trocar logo…</button>
+          <button id="menuImport">Importar .sqlite</button>
+          <button id="menuExport">Exportar .sqlite</button>
+          <button id="menuInstall" disabled>Instalar App</button>
+        </div>
+      </div>
+
+      <!-- inputs ocultos -->
+      <input type="file" id="logoInput" accept="image/*" hidden />
+      <input type="file" id="dbImport" accept=".sqlite,.db,application/octet-stream" hidden />
+      <span id="appStatus" class="small"></span>
+    </div>
+  </header>
+
+  <main class="main">
+    <aside class="panel" id="alunosPanel">
+      <div class="toolbar">
+        <input id="busca" placeholder="Buscar aluno..." />
+        <select id="statusFilter">
+          <option value="">Todos</option>
+          <option value="ATIVO">Ativo</option>
+          <option value="VENCE_EM_7">Vence em 7 dias</option>
+          <option value="VENCIDO">Vencido</option>
+        </select>
+        <button id="novoAluno" class="primary">+ Aluno</button>
+        <button id="backupNow" title="Força salvar o banco no navegador">💾</button>
+      </div>
+      <div class="toolbar-sep"></div>
+      <ul id="listaAlunos" class="cards-grid"></ul>
+    </aside>
+
+    <section class="panel" id="treinosPanel">
+      <div class="tabsHeader">
+        <div class="left">
+          <span>Treinos Abertos: <strong id="contAbertos">0/5</strong></span>
+        </div>
+        <div class="right">
+          <select id="modelos">
+            <option value="">Modelos rápidos…</option>
+            <option value="fullbody">Full Body (iniciante)</option>
+            <option value="abc">ABC (intermediário)</option>
+            <option value="hiit">HIIT 20'</option>
+          </select>
+          <button id="btnDuplicar">Duplicar</button>
+          <button id="btnRenomear">Renomear</button>
+          <button id="btnExcluirTreino" class="danger">Excluir</button>
+          <button id="btnImprimir">Imprimir</button>
+        </div>
+      </div>
+      <div id="tabs"></div>
+      <div id="vazio">Nenhum treino aberto. Abra pela lista de alunos →</div>
+    </section>
+  </main>
+
+  <!-- Modal do aluno -->
+  <div id="modalBackdrop" class="modalBackdrop hidden">
+    <div class="modal">
+      <h2 id="modalTitle">Aluno</h2>
+      <form id="alunoForm">
+        <div class="formRow">
+          <label>Nome</label>
+          <input id="fNome" required placeholder="Nome completo" />
+        </div>
+        <div class="formRow">
+          <label>Data de nascimento</label>
+          <input id="fNasc" type="date" required />
+        </div>
+        <div class="formRow">
+          <label>Vencimento do plano</label>
+          <input id="fVenc" type="date" required />
+        </div>
+        <div class="formActions">
+          <button type="submit" class="primary" id="btnSalvarAluno">Salvar</button>
+          <button type="button" id="btnCancelarAluno">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js" crossorigin="anonymous"></script>
+  <script type="module" src="src/js/main.js"></script>
+</body>
+</html>

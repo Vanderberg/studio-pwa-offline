@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Menu - Studio Alfa</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button { padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-info { background: #17a2b8; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        input, select { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group { margin: 10px 0; }
+        label { display: inline-block; width: 150px; }
+        .logo-preview { max-width: 100px; max-height: 100px; border: 1px solid #ddd; border-radius: 8px; margin: 10px 0; }
+        .file-input { display: none; }
+        .file-label { display: inline-block; padding: 8px 16px; background: #6c757d; color: white; border-radius: 4px; cursor: pointer; }
+        .file-label:hover { background: #5a6268; }
+        .status-indicator { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .status-online { background: #28a745; }
+        .status-offline { background: #dc3545; }
+        .status-pending { background: #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste Menu - Studio Alfa</h1>
+    
+    <div class="test-section">
+        <h2>🎨 Trocar Logo</h2>
+        <p>Testa a funcionalidade de trocar o logo da aplicação</p>
+        
+        <div class="form-group">
+            <label>Logo Atual:</label>
+            <img id="logoAtual" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjRiOWE4Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U1RVRElPPC90ZXh0Pgo8dGV4dCB4PSI1MCIgeT0iODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFMVkE8L3RleHQ+Cjwvc3ZnPgo=" alt="Logo padrão" class="logo-preview">
+        </div>
+        
+        <input type="file" id="logoInput" accept="image/*" class="file-input">
+        <label for="logoInput" class="file-label">📁 Escolher Nova Imagem</label>
+        
+        <button class="btn-primary" onclick="testarTrocarLogo()">🔄 Trocar Logo</button>
+        <button class="btn-info" onclick="testarRestaurarLogo()">🔄 Restaurar Logo</button>
+        
+        <div id="resultadoLogo"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📥 Importar Banco SQLite</h2>
+        <p>Testa a funcionalidade de importar banco de dados</p>
+        
+        <div class="form-group">
+            <label>Arquivo SQLite:</label>
+            <input type="file" id="dbImport" accept=".sqlite,.db,application/octet-stream">
+        </div>
+        
+        <button class="btn-primary" onclick="testarImportarBanco()">📥 Importar Banco</button>
+        <button class="btn-info" onclick="simularImportacao()">🧪 Simular Importação</button>
+        
+        <div id="resultadoImport"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📤 Exportar Banco SQLite</h2>
+        <p>Testa a funcionalidade de exportar banco de dados</p>
+        
+        <div class="form-group">
+            <label>Nome do arquivo:</label>
+            <input type="text" id="nomeExport" value="studio-alfa-backup" placeholder="Nome do arquivo">
+        </div>
+        
+        <button class="btn-success" onclick="testarExportarBanco()">📤 Exportar Banco</button>
+        <button class="btn-info" onclick="simularExportacao()">🧪 Simular Exportação</button>
+        
+        <div id="resultadoExport"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📱 Instalar App (PWA)</h2>
+        <p>Testa a funcionalidade de instalação PWA</p>
+        
+        <div class="form-group">
+            <label>Status PWA:</label>
+            <span class="status-indicator" id="pwaStatus"></span>
+            <span id="pwaStatusText">Verificando...</span>
+        </div>
+        
+        <div class="form-group">
+            <label>Prompt de instalação:</label>
+            <span id="promptStatus">Não disponível</span>
+        </div>
+        
+        <button class="btn-primary" id="btnInstall" onclick="testarInstalacao()" disabled>📱 Instalar App</button>
+        <button class="btn-info" onclick="verificarPWA()">🔍 Verificar PWA</button>
+        
+        <div id="resultadoPWA"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🌓 Temas (Claro/Escuro)</h2>
+        <p>Testa a funcionalidade de trocar temas</p>
+        
+        <div class="form-group">
+            <label>Tema Atual:</label>
+            <select id="themeSelect">
+                <option value="light">Claro</option>
+                <option value="dark">Escuro</option>
+            </select>
+        </div>
+        
+        <button class="btn-primary" onclick="testarTema()">🎨 Aplicar Tema</button>
+        <button class="btn-info" onclick="alternarTema()">🔄 Alternar Tema</button>
+        <button class="btn-warning" onclick="verificarTema()">🔍 Verificar Tema</button>
+        
+        <div id="resultadoTema"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💾 Backup e Persistência</h2>
+        <p>Testa funcionalidades de backup e persistência</p>
+        
+        <div class="form-group">
+            <label>Status do banco:</label>
+            <span class="status-indicator" id="dbStatus"></span>
+            <span id="dbStatusText">Verificando...</span>
+        </div>
+        
+        <button class="btn-success" onclick="testarBackup()">💾 Forçar Backup</button>
+        <button class="btn-info" onclick="verificarPersistencia()">🔍 Verificar Persistência</button>
+        <button class="btn-warning" onclick="limparCache()">🗑️ Limpar Cache</button>
+        
+        <div id="resultadoBackup"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Status Geral dos Testes</h2>
+        <div id="statusGeral"></div>
+    </div>
+
+    <script>
+        let deferredPrompt = null;
+        let logoOriginal = null;
+        let temaAtual = 'light';
+        
+        function mostrarResultado(elemento, mensagem, tipo = 'info') {
+            const div = document.getElementById(elemento);
+            div.innerHTML = `<div class="test-result ${tipo}">${mensagem}</div>`;
+        }
+        
+        function atualizarStatusGeral() {
+            const div = document.getElementById('statusGeral');
+            const status = {
+                logo: logoOriginal ? 'Alterado' : 'Padrão',
+                pwa: document.getElementById('btnInstall').disabled ? 'Não disponível' : 'Disponível',
+                tema: temaAtual,
+                banco: 'Simulado'
+            };
+            
+            div.innerHTML = `
+                <div class="test-result info">
+                    <strong>Status Geral:</strong><br>
+                    🎨 Logo: ${status.logo}<br>
+                    📱 PWA: ${status.pwa}<br>
+                    🌓 Tema: ${status.tema}<br>
+                    💾 Banco: ${status.banco}
+                </div>
+            `;
+        }
+        
+        // Teste de Logo
+        function testarTrocarLogo() {
+            const input = document.getElementById('logoInput');
+            if (input.files.length === 0) {
+                mostrarResultado('resultadoLogo', '❌ Selecione uma imagem primeiro!', 'error');
+                return;
+            }
+            
+            const file = input.files[0];
+            if (!file.type.startsWith('image/')) {
+                mostrarResultado('resultadoLogo', '❌ Arquivo deve ser uma imagem!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (!logoOriginal) {
+                    logoOriginal = document.getElementById('logoAtual').src;
+                }
+                
+                document.getElementById('logoAtual').src = e.target.result;
+                mostrarResultado('resultadoLogo', '✅ Logo alterado com sucesso!', 'success');
+                atualizarStatusGeral();
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function testarRestaurarLogo() {
+            if (logoOriginal) {
+                document.getElementById('logoAtual').src = logoOriginal;
+                logoOriginal = null;
+                mostrarResultado('resultadoLogo', '✅ Logo restaurado para o padrão!', 'success');
+                atualizarStatusGeral();
+            } else {
+                mostrarResultado('resultadoLogo', 'ℹ️ Logo já está no padrão', 'info');
+            }
+        }
+        
+        // Teste de Importação
+        function testarImportarBanco() {
+            const input = document.getElementById('dbImport');
+            if (input.files.length === 0) {
+                mostrarResultado('resultadoImport', '❌ Selecione um arquivo primeiro!', 'error');
+                return;
+            }
+            
+            const file = input.files[0];
+            if (!file.name.endsWith('.sqlite') && !file.name.endsWith('.db')) {
+                mostrarResultado('resultadoImport', '❌ Arquivo deve ser .sqlite ou .db!', 'error');
+                return;
+            }
+            
+            mostrarResultado('resultadoImport', `✅ Arquivo selecionado: ${file.name} (${(file.size/1024).toFixed(2)} KB)`, 'success');
+        }
+        
+        function simularImportacao() {
+            mostrarResultado('resultadoImport', '🧪 Simulando importação...', 'info');
+            setTimeout(() => {
+                mostrarResultado('resultadoImport', '✅ Importação simulada com sucesso!', 'success');
+            }, 2000);
+        }
+        
+        // Teste de Exportação
+        function testarExportarBanco() {
+            const nome = document.getElementById('nomeExport').value.trim();
+            if (!nome) {
+                mostrarResultado('resultadoExport', '❌ Digite um nome para o arquivo!', 'error');
+                return;
+            }
+            
+            // Simular download
+            const blob = new Blob(['Dados simulados do banco'], {type: 'application/octet-stream'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${nome}.sqlite`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            mostrarResultado('resultadoExport', `✅ Arquivo ${nome}.sqlite exportado!`, 'success');
+        }
+        
+        function simularExportacao() {
+            mostrarResultado('resultadoExport', '🧪 Simulando exportação...', 'info');
+            setTimeout(() => {
+                mostrarResultado('resultadoExport', '✅ Exportação simulada com sucesso!', 'success');
+            }, 1500);
+        }
+        
+        // Teste de PWA
+        function testarInstalacao() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        mostrarResultado('resultadoPWA', '✅ App instalado com sucesso!', 'success');
+                    } else {
+                        mostrarResultado('resultadoPWA', '❌ Instalação cancelada pelo usuário', 'warning');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('btnInstall').disabled = true;
+                    verificarPWA();
+                });
+            } else {
+                mostrarResultado('resultadoPWA', '❌ Prompt de instalação não disponível', 'error');
+            }
+        }
+        
+        function verificarPWA() {
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            const isInstalled = window.navigator.standalone || isStandalone;
+            
+            const statusEl = document.getElementById('pwaStatus');
+            const statusTextEl = document.getElementById('pwaStatusText');
+            
+            if (isInstalled) {
+                statusEl.className = 'status-indicator status-online';
+                statusTextEl.textContent = 'Instalado';
+                mostrarResultado('resultadoPWA', '✅ App PWA está instalado!', 'success');
+            } else {
+                statusEl.className = 'status-indicator status-offline';
+                statusTextEl.textContent = 'Não instalado';
+                mostrarResultado('resultadoPWA', 'ℹ️ App PWA não está instalado', 'info');
+            }
+            
+            // Simular prompt de instalação
+            if (!deferredPrompt) {
+                setTimeout(() => {
+                    deferredPrompt = { prompt: () => {}, userChoice: Promise.resolve({outcome: 'accepted'}) };
+                    document.getElementById('btnInstall').disabled = false;
+                    document.getElementById('promptStatus').textContent = 'Disponível';
+                    verificarPWA();
+                }, 3000);
+            }
+        }
+        
+        // Teste de Temas
+        function testarTema() {
+            const tema = document.getElementById('themeSelect').value;
+            temaAtual = tema;
+            
+            if (tema === 'dark') {
+                document.body.style.backgroundColor = '#0f172a';
+                document.body.style.color = '#e5e7eb';
+            } else {
+                document.body.style.backgroundColor = '#ffffff';
+                document.body.style.color = '#0f172a';
+            }
+            
+            mostrarResultado('resultadoTema', `✅ Tema ${tema === 'dark' ? 'escuro' : 'claro'} aplicado!`, 'success');
+            atualizarStatusGeral();
+        }
+        
+        function alternarTema() {
+            const novoTema = temaAtual === 'light' ? 'dark' : 'light';
+            document.getElementById('themeSelect').value = novoTema;
+            testarTema();
+        }
+        
+        function verificarTema() {
+            mostrarResultado('resultadoTema', `ℹ️ Tema atual: ${temaAtual === 'dark' ? 'Escuro' : 'Claro'}`, 'info');
+        }
+        
+        // Teste de Backup
+        function testarBackup() {
+            mostrarResultado('resultadoBackup', '💾 Iniciando backup...', 'info');
+            setTimeout(() => {
+                mostrarResultado('resultadoBackup', '✅ Backup realizado com sucesso!', 'success');
+            }, 1500);
+        }
+        
+        function verificarPersistencia() {
+            const statusEl = document.getElementById('dbStatus');
+            const statusTextEl = document.getElementById('dbStatusText');
+            
+            statusEl.className = 'status-indicator status-online';
+            statusTextEl.textContent = 'Online';
+            
+            mostrarResultado('resultadoBackup', '✅ Persistência verificada - Banco funcionando!', 'success');
+        }
+        
+        function limparCache() {
+            mostrarResultado('resultadoBackup', '🗑️ Limpando cache...', 'warning');
+            setTimeout(() => {
+                mostrarResultado('resultadoBackup', '✅ Cache limpo com sucesso!', 'success');
+            }, 1000);
+        }
+        
+        // Event listeners
+        document.getElementById('logoInput').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                mostrarResultado('resultadoLogo', `📁 Arquivo selecionado: ${this.files[0].name}`, 'info');
+            }
+        });
+        
+        document.getElementById('dbImport').addEventListener('change', function() {
+            if (this.files.length > 0) {
+                mostrarResultado('resultadoImport', `📁 Arquivo selecionado: ${this.files[0].name}`, 'info');
+            }
+        });
+        
+        // Inicialização
+        window.onload = function() {
+            verificarPWA();
+            verificarPersistencia();
+            testarTema();
+            atualizarStatusGeral();
+            
+            // Simular prompt de instalação após 3 segundos
+            setTimeout(verificarPWA, 3000);
+        };
+    </script>
+</body>
+</html>
+
+

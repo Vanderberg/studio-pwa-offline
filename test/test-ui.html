@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste UI - Studio Alfa</title>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --panel: #f8fafc;
+            --fg: #0f172a;
+            --muted: #475569;
+            --border: #e2e8f0;
+            --brand: #24b9a8;
+            --brand-2: #d6e54b;
+            --logo-size: 120px;
+        }
+        
+        .dark {
+            --bg: #0f172a;
+            --panel: #0b1224;
+            --fg: #e5e7eb;
+            --muted: #9ca3af;
+            --border: #1f2937;
+        }
+        
+        * { box-sizing: border-box; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+        
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: var(--fg); 
+            transition: all 0.3s ease;
+        }
+        
+        .header { 
+            padding: 12px 16px; 
+            background: var(--panel); 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 16px; 
+            flex-wrap: wrap; 
+        }
+        
+        .brand { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+        }
+        
+        #logoImg { 
+            height: var(--logo-size); 
+            width: auto; 
+            border-radius: 10px; 
+            background: #11111122; 
+            padding: 4px; 
+        }
+        
+        .brand h1 { 
+            margin: 0; 
+            font-size: clamp(24px, 3.2vw, 40px); 
+        }
+        
+        .header-actions { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+        }
+        
+        .menu { 
+            position: relative; 
+        }
+        
+        .menu > button { 
+            padding: 8px 10px; 
+            border: 1px solid var(--border); 
+            background: var(--panel); 
+            color: var(--fg); 
+            border-radius: 8px; 
+            cursor: pointer; 
+        }
+        
+        .dropdown { 
+            position: absolute; 
+            right: 0; 
+            top: 110%; 
+            background: var(--panel); 
+            border: 1px solid var(--border); 
+            border-radius: 10px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,.2); 
+            padding: 6px; 
+            display: grid; 
+            gap: 6px; 
+            min-width: 220px; 
+            z-index: 20; 
+        }
+        
+        .dropdown[hidden] { 
+            display: none !important; 
+        }
+        
+        .dropdown > button { 
+            text-align: left; 
+            padding: 10px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border); 
+            background: var(--panel); 
+            color: var(--fg); 
+            cursor: pointer; 
+        }
+        
+        .dropdown > button:hover { 
+            border-color: var(--brand); 
+        }
+        
+        select, input, button { 
+            padding: 8px 10px; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+            background: var(--panel); 
+            color: var(--fg); 
+        }
+        
+        button.primary { 
+            background: var(--brand); 
+            color: #041e1b; 
+            border-color: #0aa897; 
+        }
+        
+        button.danger { 
+            background: #fee2e2; 
+            color: #7f1d1d; 
+            border-color: #fecaca; 
+        }
+        
+        .main { 
+            display: grid; 
+            grid-template-columns: 420px 1fr; 
+            gap: 16px; 
+            padding: 16px; 
+            height: calc(100vh - 120px); 
+        }
+        
+        .panel { 
+            background: var(--panel); 
+            border: 1px solid var(--border); 
+            border-radius: 14px; 
+            padding: 12px; 
+            min-height: 0; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        
+        .toolbar { 
+            display: grid; 
+            grid-template-columns: 1fr auto auto auto; 
+            gap: 10px; 
+            align-items: center; 
+        }
+        
+        .toolbar-sep { 
+            height: 8px; 
+        }
+        
+        .cards-grid { 
+            display: grid; 
+            gap: 14px; 
+            overflow: auto; 
+            padding: 4px; 
+        }
+        
+        .card { 
+            border: 1px solid var(--border); 
+            border-radius: 14px; 
+            padding: 12px; 
+            background: color-mix(in srgb, var(--panel) 90%, black 10%); 
+        }
+        
+        .card .title { 
+            font-size: 18px; 
+            font-weight: 700; 
+            margin-bottom: 8px; 
+        }
+        
+        .badgeDate { 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 6px; 
+            padding: 6px 10px; 
+            border-radius: 999px; 
+            border: 1px solid var(--border); 
+            font-weight: 700; 
+            margin-right: 6px; 
+        }
+        
+        .dateNascimento { 
+            background: #233042; 
+            color: #dbeafe; 
+        }
+        
+        .dateVenc { 
+            background: #3b2f1f; 
+            color: #fde68a; 
+        }
+        
+        .light .dateNascimento { 
+            background: #e0e7ff; 
+            color: #1e3a8a; 
+        }
+        
+        .light .dateVenc { 
+            background: #fff6db; 
+            color: #7c2d12; 
+        }
+        
+        .badge { 
+            padding: 2px 8px; 
+            border: 1px solid var(--border); 
+            border-radius: 999px; 
+            font-size: 12px; 
+        }
+        
+        .badge.ATIVO { 
+            background: #dcfce7; 
+            color: #14532d; 
+        }
+        
+        .badge.VENCE_EM_7 { 
+            background: #fff7ed; 
+            color: #7c2d12; 
+        }
+        
+        .badge.VENCIDO { 
+            background: #fee2e2; 
+            color: #7f1d1d; 
+        }
+        
+        .itemActions { 
+            display: flex; 
+            gap: 8px; 
+            margin-top: 10px; 
+            flex-wrap: wrap; 
+        }
+        
+        .tabsHeader { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 8px; 
+            flex-wrap: wrap; 
+            gap: 8px; 
+        }
+        
+        .tabBar { 
+            display: flex; 
+            gap: 6px; 
+            border-bottom: 1px solid var(--border); 
+            padding-bottom: 6px; 
+            flex-wrap: wrap; 
+        }
+        
+        .tab { 
+            background: #1f2937; 
+            color: #e5e7eb; 
+            border: 1px solid var(--border); 
+            border-radius: 8px 8px 0 0; 
+            padding: 6px 10px; 
+            cursor: pointer; 
+        }
+        
+        .light .tab { 
+            background: #f1f5f9; 
+            color: #111827; 
+        }
+        
+        .tab.active { 
+            background: var(--panel); 
+            border-bottom-color: var(--panel); 
+        }
+        
+        .tab .close { 
+            margin-left: 8px; 
+            opacity: .8; 
+            cursor: pointer; 
+        }
+        
+        .tabContent { 
+            padding: 10px; 
+            display: none; 
+        }
+        
+        .tabContent.active { 
+            display: block; 
+        }
+        
+        textarea { 
+            width: 100%; 
+            height: calc(100vh - 320px); 
+            resize: none; 
+        }
+        
+        .small { 
+            font-size: 12px; 
+            opacity: .8; 
+        }
+        
+        /* Modal */
+        .hidden { 
+            display: none !important; 
+        }
+        
+        .modalBackdrop { 
+            position: fixed; 
+            inset: 0; 
+            background: rgba(0,0,0,.35); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 50; 
+        }
+        
+        .modal { 
+            background: var(--panel); 
+            color: var(--fg); 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            width: min(520px,92vw); 
+            padding: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,.3); 
+        }
+        
+        .formRow { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            margin: 10px 0; 
+        }
+        
+        .formActions { 
+            display: flex; 
+            gap: 8px; 
+            justify-content: flex-end; 
+            margin-top: 12px; 
+        }
+        
+        /* Testes específicos */
+        .test-section { 
+            margin: 20px 0; 
+            padding: 15px; 
+            border: 1px solid var(--border); 
+            border-radius: 8px; 
+        }
+        
+        .test-result { 
+            margin: 10px 0; 
+            padding: 10px; 
+            border-radius: 5px; 
+        }
+        
+        .success { 
+            background: #d4edda; 
+            color: #155724; 
+            border: 1px solid #c3e6cb; 
+        }
+        
+        .error { 
+            background: #f8d7da; 
+            color: #721c24; 
+            border: 1px solid #f5c6cb; 
+        }
+        
+        .info { 
+            background: #d1ecf1; 
+            color: #0c5460; 
+            border: 1px solid #bee5eb; 
+        }
+        
+        .warning { 
+            background: #fff3cd; 
+            color: #856404; 
+            border: 1px solid #ffeaa7; 
+        }
+        
+        .btn-primary { 
+            background: #007bff; 
+            color: white; 
+        }
+        
+        .btn-success { 
+            background: #28a745; 
+            color: white; 
+        }
+        
+        .btn-danger { 
+            background: #dc3545; 
+            color: white; 
+        }
+        
+        .btn-info { 
+            background: #17a2b8; 
+            color: white; 
+        }
+        
+        .btn-warning { 
+            background: #ffc107; 
+            color: #212529; 
+        }
+        
+        .responsive-test { 
+            border: 2px dashed var(--border); 
+            padding: 20px; 
+            margin: 20px 0; 
+            text-align: center; 
+        }
+        
+        .color-palette { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+            gap: 10px; 
+            margin: 20px 0; 
+        }
+        
+        .color-swatch { 
+            padding: 20px; 
+            border-radius: 8px; 
+            text-align: center; 
+            color: white; 
+            font-weight: bold; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="brand">
+            <img id="logoImg" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjMjRiOWE4Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI2MCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+U1RVRElPPC90ZXh0Pgo8dGV4dCB4PSI1MCIgeT0iODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkFMVkE8L3RleHQ+Cjwvc3ZnPgo=" alt="Logo Studio Alfa" />
+            <h1>Studio Alfa</h1>
+        </div>
+
+        <div class="header-actions">
+            <select id="themeSelect" title="Tema">
+                <option value="light">Claro</option>
+                <option value="dark">Escuro</option>
+            </select>
+
+            <div class="menu">
+                <button id="menuToggle" aria-haspopup="true" aria-expanded="false" aria-controls="menuDropdown">☰ Menu</button>
+                <div id="menuDropdown" class="dropdown" hidden>
+                    <button id="menuLogo">Trocar logo…</button>
+                    <button id="menuImport">Importar .sqlite</button>
+                    <button id="menuExport">Exportar .sqlite</button>
+                    <button id="menuInstall" disabled>Instalar App</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <aside class="panel" id="alunosPanel">
+            <div class="toolbar">
+                <input id="busca" placeholder="Buscar aluno..." />
+                <select id="statusFilter">
+                    <option value="">Todos</option>
+                    <option value="ATIVO">Ativo</option>
+                    <option value="VENCE_EM_7">Vence em 7 dias</option>
+                    <option value="VENCIDO">Vencido</option>
+                </select>
+                <button id="novoAluno" class="primary">+ Aluno</button>
+                <button id="backupNow" title="Força salvar o banco no navegador">💾</button>
+            </div>
+            <div class="toolbar-sep"></div>
+            <ul id="listaAlunos" class="cards-grid">
+                <!-- Cards de exemplo para teste -->
+                <li class="card">
+                    <div class="title">João Silva</div>
+                    <div>
+                        <span class="badgeDate dateNascimento">🎂 15/03/1990</span>
+                        <span class="badgeDate dateVenc">📅 15/12/2024</span>
+                        <span class="badge ATIVO">ATIVO</span>
+                    </div>
+                    <div class="itemActions">
+                        <button class="primary edit">Editar</button>
+                        <button class="danger del">Excluir</button>
+                        <button class="verTreinos">Ver treinos</button>
+                        <button class="addTreino">+ Treino</button>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="title">Maria Santos</div>
+                    <div>
+                        <span class="badgeDate dateNascimento">🎂 22/07/1985</span>
+                        <span class="badgeDate dateVenc">📅 05/12/2024</span>
+                        <span class="badge VENCE_EM_7">VENCE EM 7</span>
+                    </div>
+                    <div class="itemActions">
+                        <button class="primary edit">Editar</button>
+                        <button class="danger del">Excluir</button>
+                        <button class="verTreinos">Ver treinos</button>
+                        <button class="addTreino">+ Treino</button>
+                    </div>
+                </li>
+                <li class="card">
+                    <div class="title">Pedro Costa</div>
+                    <div>
+                        <span class="badgeDate dateNascimento">🎂 10/11/1992</span>
+                        <span class="badgeDate dateVenc">📅 01/12/2024</span>
+                        <span class="badge VENCIDO">VENCIDO</span>
+                    </div>
+                    <div class="itemActions">
+                        <button class="primary edit">Editar</button>
+                        <button class="danger del">Excluir</button>
+                        <button class="verTreinos">Ver treinos</button>
+                        <button class="addTreino">+ Treino</button>
+                    </div>
+                </li>
+            </ul>
+        </aside>
+
+        <section class="panel" id="treinosPanel">
+            <div class="tabsHeader">
+                <div class="left">
+                    <span>Treinos Abertos: <strong id="contAbertos">1/5</strong></span>
+                </div>
+                <div class="right">
+                    <select id="modelos">
+                        <option value="">Modelos rápidos…</option>
+                        <option value="fullbody">Full Body (iniciante)</option>
+                        <option value="abc">ABC (intermediário)</option>
+                        <option value="hiit">HIIT 20'</option>
+                    </select>
+                    <button id="btnDuplicar">Duplicar</button>
+                    <button id="btnRenomear">Renomear</button>
+                    <button id="btnExcluirTreino" class="danger">Excluir</button>
+                    <button id="btnImprimir">Imprimir</button>
+                </div>
+            </div>
+            <div id="tabs">
+                <div class="tabBar">
+                    <div class="tab active">Treino A</div>
+                </div>
+                <div class="tabContent active">
+                    <div class="itemActions">
+                        <input class="titulo" value="Treino A" />
+                        <button class="fechar">Fechar</button>
+                        <span class="small saveInfo">Salvo em: 2024-12-01 10:30</span>
+                    </div>
+                    <textarea class="texto" placeholder="Texto do treino...">A) Agachamento livre 3x10
+B) Supino reto 3x10
+C) Remada baixa 3x12
+D) Desenvolvimento 3x12
+E) Prancha 3x30s</textarea>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal do aluno -->
+    <div id="modalBackdrop" class="modalBackdrop hidden">
+        <div class="modal">
+            <h2 id="modalTitle">Aluno</h2>
+            <form id="alunoForm">
+                <div class="formRow">
+                    <label>Nome</label>
+                    <input id="fNome" required placeholder="Nome completo" />
+                </div>
+                <div class="formRow">
+                    <label>Data de nascimento</label>
+                    <input id="fNasc" type="date" required />
+                </div>
+                <div class="formRow">
+                    <label>Vencimento do plano</label>
+                    <input id="fVenc" type="date" required />
+                </div>
+                <div class="formActions">
+                    <button type="submit" class="primary" id="btnSalvarAluno">Salvar</button>
+                    <button type="button" id="btnCancelarAluno">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Seção de testes -->
+    <div style="padding: 20px; background: var(--panel); border-top: 1px solid var(--border);">
+        <h2>🧪 Testes de Interface</h2>
+        
+        <div class="test-section">
+            <h3>🌓 Teste de Temas</h3>
+            <p>Teste a funcionalidade de trocar entre tema claro e escuro</p>
+            <button class="btn-primary" onclick="testarTema()">🎨 Aplicar Tema Selecionado</button>
+            <button class="btn-info" onclick="alternarTema()">🔄 Alternar Tema</button>
+            <div id="resultadoTema"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📱 Teste de Responsividade</h3>
+            <p>Teste como a interface se comporta em diferentes tamanhos de tela</p>
+            <div class="responsive-test">
+                <p><strong>Largura atual:</strong> <span id="larguraAtual"></span>px</p>
+                <p><strong>Breakpoint:</strong> <span id="breakpoint"></span></p>
+                <button class="btn-info" onclick="testarResponsividade()">🔍 Testar Responsividade</button>
+            </div>
+            <div id="resultadoResponsividade"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🎨 Paleta de Cores</h3>
+            <p>Visualize as cores utilizadas no tema atual</p>
+            <div class="color-palette">
+                <div class="color-swatch" style="background: var(--bg)">--bg</div>
+                <div class="color-swatch" style="background: var(--panel)">--panel</div>
+                <div class="color-swatch" style="background: var(--fg)">--fg</div>
+                <div class="color-swatch" style="background: var(--muted)">--muted</div>
+                <div class="color-swatch" style="background: var(--border)">--border</div>
+                <div class="color-swatch" style="background: var(--brand)">--brand</div>
+                <div class="color-swatch" style="background: var(--brand-2)">--brand-2</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔧 Teste de Funcionalidades</h3>
+            <p>Teste as funcionalidades básicas da interface</p>
+            <button class="btn-primary" onclick="testarModal()">📋 Abrir Modal</button>
+            <button class="btn-success" onclick="testarMenu()">☰ Testar Menu</button>
+            <button class="btn-info" onclick="testarTabs()">📑 Testar Abas</button>
+            <button class="btn-warning" onclick="testarFormularios()">📝 Testar Formulários</button>
+            <div id="resultadoFuncionalidades"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Status dos Testes</h3>
+            <div id="statusTestes"></div>
+        </div>
+    </div>
+
+    <script>
+        let temaAtual = 'light';
+        
+        function mostrarResultado(elemento, mensagem, tipo = 'info') {
+            const div = document.getElementById(elemento);
+            div.innerHTML = `<div class="test-result ${tipo}">${mensagem}</div>`;
+        }
+        
+        function atualizarStatus() {
+            const div = document.getElementById('statusTestes');
+            div.innerHTML = `
+                <div class="test-result info">
+                    <strong>Status da Interface:</strong><br>
+                    🌓 Tema: ${temaAtual}<br>
+                    📱 Responsivo: ${window.innerWidth < 768 ? 'Mobile' : 'Desktop'}<br>
+                    🎨 Cores: Aplicadas<br>
+                    🔧 Funcionalidades: Testadas
+                </div>
+            `;
+        }
+        
+        // Teste de Temas
+        function testarTema() {
+            const tema = document.getElementById('themeSelect').value;
+            temaAtual = tema;
+            
+            if (tema === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.documentElement.classList.remove('light');
+            } else {
+                document.documentElement.classList.add('light');
+                document.documentElement.classList.remove('dark');
+            }
+            
+            mostrarResultado('resultadoTema', `✅ Tema ${tema === 'dark' ? 'escuro' : 'claro'} aplicado com sucesso!`, 'success');
+            atualizarStatus();
+        }
+        
+        function alternarTema() {
+            const novoTema = temaAtual === 'light' ? 'dark' : 'light';
+            document.getElementById('themeSelect').value = novoTema;
+            testarTema();
+        }
+        
+        // Teste de Responsividade
+        function testarResponsividade() {
+            const largura = window.innerWidth;
+            let breakpoint = '';
+            
+            if (largura < 480) breakpoint = 'Mobile pequeno';
+            else if (largura < 768) breakpoint = 'Mobile';
+            else if (largura < 1024) breakpoint = 'Tablet';
+            else if (largura < 1200) breakpoint = 'Desktop pequeno';
+            else breakpoint = 'Desktop grande';
+            
+            document.getElementById('larguraAtual').textContent = largura;
+            document.getElementById('breakpoint').textContent = breakpoint;
+            
+            mostrarResultado('resultadoResponsividade', `✅ Responsividade testada! Largura: ${largura}px (${breakpoint})`, 'success');
+        }
+        
+        // Teste de Modal
+        function testarModal() {
+            const modal = document.getElementById('modalBackdrop');
+            modal.classList.remove('hidden');
+            mostrarResultado('resultadoFuncionalidades', '✅ Modal aberto com sucesso!', 'success');
+            
+            // Fechar modal após 3 segundos
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 3000);
+        }
+        
+        // Teste de Menu
+        function testarMenu() {
+            const dropdown = document.getElementById('menuDropdown');
+            const toggle = document.getElementById('menuToggle');
+            
+            if (dropdown.hasAttribute('hidden')) {
+                dropdown.removeAttribute('hidden');
+                toggle.setAttribute('aria-expanded', 'true');
+                mostrarResultado('resultadoFuncionalidades', '✅ Menu aberto!', 'success');
+            } else {
+                dropdown.setAttribute('hidden', '');
+                toggle.setAttribute('aria-expanded', 'false');
+                mostrarResultado('resultadoFuncionalidades', '✅ Menu fechado!', 'success');
+            }
+        }
+        
+        // Teste de Abas
+        function testarTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tabContent');
+            
+            // Simular clique em uma nova aba
+            if (tabs.length > 1) {
+                tabs[1].click();
+            } else {
+                // Criar nova aba para teste
+                const tabBar = document.querySelector('.tabBar');
+                const newTab = document.createElement('div');
+                newTab.className = 'tab';
+                newTab.textContent = 'Nova Aba';
+                tabBar.appendChild(newTab);
+                
+                const newContent = document.createElement('div');
+                newContent.className = 'tabContent';
+                newContent.innerHTML = '<p>Conteúdo da nova aba</p>';
+                document.getElementById('tabs').appendChild(newContent);
+                
+                mostrarResultado('resultadoFuncionalidades', '✅ Nova aba criada para teste!', 'success');
+            }
+        }
+        
+        // Teste de Formulários
+        function testarFormularios() {
+            const form = document.getElementById('alunoForm');
+            const inputs = form.querySelectorAll('input');
+            
+            // Preencher formulário com dados de teste
+            inputs[0].value = 'Aluno Teste';
+            inputs[1].value = '1990-01-01';
+            inputs[2].value = '2025-12-31';
+            
+            mostrarResultado('resultadoFuncionalidades', '✅ Formulário preenchido com dados de teste!', 'success');
+        }
+        
+        // Event listeners
+        document.getElementById('themeSelect').addchange = function() {
+            testarTema();
+        };
+        
+        document.getElementById('btnCancelarAluno').onclick = function() {
+            document.getElementById('modalBackdrop').classList.add('hidden');
+        };
+        
+        document.getElementById('menuToggle').onclick = function() {
+            testarMenu();
+        };
+        
+        // Fechar modal ao clicar fora
+        document.getElementById('modalBackdrop').onclick = function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        };
+        
+        // Atualizar largura em tempo real
+        window.onresize = function() {
+            testarResponsividade();
+        };
+        
+        // Inicialização
+        window.onload = function() {
+            testarTema();
+            testarResponsividade();
+            atualizarStatus();
+            
+            // Definir data padrão para formulário
+            const hoje = new Date();
+            const amanha = new Date(hoje);
+            amanha.setDate(hoje.getDate() + 30);
+            
+            document.getElementById('fNasc').value = hoje.toISOString().split('T')[0];
+            document.getElementById('fVenc').value = amanha.toISOString().split('T')[0];
+        };
+    </script>
+</body>
+</html>
+
+

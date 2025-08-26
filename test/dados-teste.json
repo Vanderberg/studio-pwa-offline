@@ -1,0 +1,168 @@
+{
+  "alunos": [
+    {
+      "id": "aluno_001",
+      "nome": "João Silva",
+      "data_nascimento": "1990-03-15",
+      "vencimento": "2024-12-31",
+      "status": "ATIVO"
+    },
+    {
+      "id": "aluno_002",
+      "nome": "Maria Santos",
+      "data_nascimento": "1985-07-22",
+      "vencimento": "2024-12-05",
+      "status": "VENCE_EM_7"
+    },
+    {
+      "id": "aluno_003",
+      "nome": "Pedro Costa",
+      "data_nascimento": "1992-11-10",
+      "vencimento": "2024-12-01",
+      "status": "VENCIDO"
+    },
+    {
+      "id": "aluno_004",
+      "nome": "Ana Oliveira",
+      "data_nascimento": "1988-04-18",
+      "vencimento": "2025-01-15",
+      "status": "ATIVO"
+    },
+    {
+      "id": "aluno_005",
+      "nome": "Carlos Lima",
+      "data_nascimento": "1995-09-30",
+      "vencimento": "2024-12-20",
+      "status": "VENCE_EM_7"
+    },
+    {
+      "id": "aluno_006",
+      "nome": "Fernanda Rocha",
+      "data_nascimento": "1991-12-03",
+      "vencimento": "2025-02-28",
+      "status": "ATIVO"
+    },
+    {
+      "id": "aluno_007",
+      "nome": "Roberto Alves",
+      "data_nascimento": "1987-06-12",
+      "vencimento": "2024-11-25",
+      "status": "VENCIDO"
+    },
+    {
+      "id": "aluno_008",
+      "nome": "Juliana Ferreira",
+      "data_nascimento": "1993-01-25",
+      "vencimento": "2025-03-10",
+      "status": "ATIVO"
+    }
+  ],
+  "treinos": [
+    {
+      "id": "treino_001",
+      "aluno_id": "aluno_001",
+      "titulo": "Full Body - Iniciante",
+      "texto": "FULL BODY (iniciante)\n\nA) Agachamento livre 3x10\nB) Supino reto 3x10\nC) Remada baixa 3x12\nD) Desenvolvimento 3x12\nE) Prancha 3x30s\n\nDescanso: 90s entre séries",
+      "atualizado_em": "2024-12-01T10:30:00.000Z"
+    },
+    {
+      "id": "treino_002",
+      "aluno_id": "aluno_001",
+      "titulo": "ABC - Intermediário",
+      "texto": "TREINO ABC (intermediário)\n\nA) Peito/Tríceps\n- Supino inclinado 4x8\n- Supino fechado 3x10\n- Extensão tríceps 3x12\n\nB) Costas/Bíceps\n- Puxada na frente 4x8\n- Remada curvada 3x10\n- Rosca direta 3x12\n\nC) Pernas/Ombros\n- Agachamento 4x8\n- Leg press 3x10\n- Desenvolvimento 3x12",
+      "atualizado_em": "2024-12-01T14:15:00.000Z"
+    },
+    {
+      "id": "treino_003",
+      "aluno_id": "aluno_002",
+      "titulo": "HIIT 20 Minutos",
+      "texto": "HIIT 20 MINUTOS\n\n- 1 min corrida forte / 1 min caminhada (x10)\n- 30s burpee / 30s descanso (x5)\n- 45s mountain climber / 15s descanso (x8)\n\nTotal: 20 minutos\nIntensidade: Alta",
+      "atualizado_em": "2024-12-01T16:45:00.000Z"
+    },
+    {
+      "id": "treino_004",
+      "aluno_id": "aluno_002",
+      "titulo": "Força - Superior",
+      "texto": "TREINO FORÇA - SUPERIOR\n\n1. Supino reto: 5x5 (80-85% 1RM)\n2. Puxada na frente: 5x5 (80-85% 1RM)\n3. Desenvolvimento: 4x6 (75-80% 1RM)\n4. Remada baixa: 4x6 (75-80% 1RM)\n5. Rosca direta: 3x8 (70-75% 1RM)\n\nDescanso: 3-5 min entre exercícios",
+      "atualizado_em": "2024-12-01T18:20:00.000Z"
+    },
+    {
+      "id": "treino_005",
+      "aluno_id": "aluno_003",
+      "titulo": "Cardio - Esteira",
+      "texto": "CARDIO ESTEIRA\n\n- 5 min aquecimento (6 km/h)\n- 20 min intensidade moderada (8-10 km/h)\n- 5 min desaquecimento (6 km/h)\n\nFrequência cardíaca alvo: 65-75% FCmax",
+      "atualizado_em": "2024-11-30T09:00:00.000Z"
+    },
+    {
+      "id": "treino_006",
+      "aluno_id": "aluno_004",
+      "titulo": "Funcional - Core",
+      "texto": "FUNCIONAL - CORE\n\n1. Prancha isométrica: 3x45s\n2. Prancha lateral: 3x30s cada lado\n3. Abdominal bicicleta: 3x20\n4. Superman: 3x15\n5. Russian twist: 3x20 cada lado\n6. Hollow hold: 3x30s\n\nDescanso: 60s entre séries",
+      "atualizado_em": "2024-12-01T11:00:00.000Z"
+    },
+    {
+      "id": "treino_007",
+      "aluno_id": "aluno_005",
+      "titulo": "Mobilidade e Flexibilidade",
+      "texto": "MOBILIDADE E FLEXIBILIDADE\n\n1. Alongamento dinâmico: 10 min\n2. Cat-cow: 2x10\n3. World's greatest stretch: 2x5 cada lado\n4. Hip flexor stretch: 2x30s cada lado\n5. Thoracic rotation: 2x10 cada lado\n6. Ankle mobility: 2x10 cada lado\n\nFoco: Preparação para treino",
+      "atualizado_em": "2024-12-01T07:30:00.000Z"
+    },
+    {
+      "id": "treino_008",
+      "aluno_id": "aluno_006",
+      "titulo": "Pilates - Solo",
+      "texto": "PILATES SOLO\n\n1. Hundred: 1x100\n2. Roll up: 3x8\n3. Single leg stretch: 3x10 cada lado\n4. Double leg stretch: 3x10\n5. Scissors: 3x10\n6. Shoulder bridge: 3x8\n7. Swan dive: 3x5\n\nRespiração: Coordenada com movimento",
+      "atualizado_em": "2024-12-01T15:00:00.000Z"
+    },
+    {
+      "id": "treino_009",
+      "aluno_id": "aluno_007",
+      "titulo": "Yoga - Vinyasa",
+      "texto": "YOGA VINYASA\n\nSequência:\n1. Surya Namaskara A: 3x\n2. Surya Namaskara B: 3x\n3. Virabhadrasana I, II, III\n4. Trikonasana\n5. Ardha Chandrasana\n6. Savasana: 5 min\n\nDuração: 60 min\nNível: Intermediário",
+      "atualizado_em": "2024-11-29T17:00:00.000Z"
+    },
+    {
+      "id": "treino_010",
+      "aluno_id": "aluno_008",
+      "titulo": "CrossFit - WOD",
+      "texto": "CROSSFIT WOD\n\n\"Cindy\"\n20 min AMRAP:\n- 5 pull-ups\n- 10 push-ups\n- 15 air squats\n\nObjetivo: Máximo de rounds em 20 min\nEscalação disponível para iniciantes",
+      "atualizado_em": "2024-12-01T06:00:00.000Z"
+    }
+  ],
+  "estatisticas": {
+    "total_alunos": 8,
+    "alunos_ativos": 4,
+    "alunos_vencendo_em_7": 2,
+    "alunos_vencidos": 2,
+    "total_treinos": 10,
+    "media_treinos_por_aluno": 1.25,
+    "treinos_por_categoria": {
+      "força": 3,
+      "cardio": 2,
+      "funcional": 2,
+      "flexibilidade": 1,
+      "pilates": 1,
+      "yoga": 1
+    }
+  },
+  "configuracoes": {
+    "nome_academia": "Studio Alfa",
+    "versao_sistema": "6.6.2",
+    "data_criacao": "2024-12-01",
+    "ultima_atualizacao": "2024-12-01T18:30:00.000Z",
+    "configuracoes_pwa": {
+      "nome": "Studio Alfa",
+      "short_name": "Studio Alfa",
+      "theme_color": "#24b9a8",
+      "background_color": "#0b1224"
+    }
+  },
+  "notas": [
+    "Este arquivo contém dados de teste para o sistema Studio Alfa",
+    "Os dados incluem alunos, treinos e estatísticas simuladas",
+    "Use para testar funcionalidades de importação/exportação",
+    "Todos os dados são fictícios e servem apenas para testes"
+  ]
+}
+
+

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste CRUD - Studio Alfa</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .test-result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        button { padding: 8px 16px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-info { background: #17a2b8; color: white; }
+        input, select { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group { margin: 10px 0; }
+        label { display: inline-block; width: 120px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste CRUD - Studio Alfa</h1>
+    
+    <div class="test-section">
+        <h2>👥 Teste de Alunos</h2>
+        
+        <div class="form-group">
+            <label>Nome:</label>
+            <input type="text" id="nomeAluno" placeholder="Nome do aluno">
+        </div>
+        
+        <div class="form-group">
+            <label>Data Nascimento:</label>
+            <input type="date" id="nascAluno">
+        </div>
+        
+        <div class="form-group">
+            <label>Vencimento:</label>
+            <input type="date" id="vencAluno">
+        </div>
+        
+        <button class="btn-primary" onclick="testarCriarAluno()">✅ Criar Aluno</button>
+        <button class="btn-info" onclick="testarBuscarAlunos()">🔍 Buscar Alunos</button>
+        <button class="btn-success" onclick="testarEditarAluno()">✏️ Editar Aluno</button>
+        <button class="btn-danger" onclick="testarExcluirAluno()">🗑️ Excluir Aluno</button>
+        
+        <div id="resultadoAlunos"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💪 Teste de Treinos</h2>
+        
+        <div class="form-group">
+            <label>Aluno ID:</label>
+            <input type="text" id="alunoIdTreino" placeholder="ID do aluno">
+        </div>
+        
+        <div class="form-group">
+            <label>Título:</label>
+            <input type="text" id="tituloTreino" placeholder="Título do treino">
+        </div>
+        
+        <div class="form-group">
+            <label>Texto:</label>
+            <textarea id="textoTreino" placeholder="Texto do treino" rows="4" cols="50"></textarea>
+        </div>
+        
+        <button class="btn-primary" onclick="testarCriarTreino()">✅ Criar Treino</button>
+        <button class="btn-info" onclick="testarBuscarTreinos()">🔍 Buscar Treinos</button>
+        <button class="btn-success" onclick="testarEditarTreino()">✏️ Editar Treino</button>
+        <button class="btn-danger" onclick="testarExcluirTreino()">🗑️ Excluir Treino</button>
+        <button class="btn-info" onclick="testarDuplicarTreino()">📋 Duplicar Treino</button>
+        
+        <div id="resultadoTreinos"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔍 Teste de Filtros e Busca</h2>
+        
+        <div class="form-group">
+            <label>Busca:</label>
+            <input type="text" id="buscaTeste" placeholder="Buscar por nome">
+        </div>
+        
+        <div class="form-group">
+            <label>Status:</label>
+            <select id="statusTeste">
+                <option value="">Todos</option>
+                <option value="ATIVO">Ativo</option>
+                <option value="VENCE_EM_7">Vence em 7 dias</option>
+                <option value="VENCIDO">Vencido</option>
+            </select>
+        </div>
+        
+        <button class="btn-info" onclick="testarFiltros()">🔍 Aplicar Filtros</button>
+        
+        <div id="resultadoFiltros"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Status dos Testes</h2>
+        <div id="statusTestes"></div>
+    </div>
+
+    <script>
+        // Simulação do banco de dados para testes
+        let alunos = [];
+        let treinos = [];
+        let nextId = 1;
+        
+        function mostrarResultado(elemento, mensagem, tipo = 'info') {
+            const div = document.getElementById(elemento);
+            div.innerHTML = `<div class="test-result ${tipo}">${mensagem}</div>`;
+        }
+        
+        function atualizarStatus() {
+            const div = document.getElementById('statusTestes');
+            div.innerHTML = `
+                <div class="test-result info">
+                    <strong>Status do Banco:</strong><br>
+                    📊 Alunos: ${alunos.length}<br>
+                    💪 Treinos: ${treinos.length}<br>
+                    🔢 Próximo ID: ${nextId}
+                </div>
+            `;
+        }
+        
+        // Testes de Alunos
+        function testarCriarAluno() {
+            const nome = document.getElementById('nomeAluno').value;
+            const nasc = document.getElementById('nascAluno').value;
+            const venc = document.getElementById('vencAluno').value;
+            
+            if (!nome || !nasc || !venc) {
+                mostrarResultado('resultadoAlunos', '❌ Preencha todos os campos!', 'error');
+                return;
+            }
+            
+            const aluno = {
+                id: nextId++,
+                nome: nome,
+                data_nascimento: nasc,
+                vencimento: venc
+            };
+            
+            alunos.push(aluno);
+            mostrarResultado('resultadoAlunos', `✅ Aluno criado com sucesso! ID: ${aluno.id}`, 'success');
+            atualizarStatus();
+            
+            // Limpar campos
+            document.getElementById('nomeAluno').value = '';
+            document.getElementById('nascAluno').value = '';
+            document.getElementById('vencAluno').value = '';
+        }
+        
+        function testarBuscarAlunos() {
+            if (alunos.length === 0) {
+                mostrarResultado('resultadoAlunos', 'ℹ️ Nenhum aluno cadastrado', 'info');
+                return;
+            }
+            
+            const lista = alunos.map(a => `ID: ${a.id} - ${a.nome} (${a.data_nascimento})`).join('<br>');
+            mostrarResultado('resultadoAlunos', `<strong>Alunos cadastrados:</strong><br>${lista}`, 'success');
+        }
+        
+        function testarEditarAluno() {
+            if (alunos.length === 0) {
+                mostrarResultado('resultadoAlunos', 'ℹ️ Nenhum aluno para editar', 'info');
+                return;
+            }
+            
+            const aluno = alunos[0];
+            aluno.nome = aluno.nome + ' (editado)';
+            mostrarResultado('resultadoAlunos', `✅ Aluno editado! Novo nome: ${aluno.nome}`, 'success');
+        }
+        
+        function testarExcluirAluno() {
+            if (alunos.length === 0) {
+                mostrarResultado('resultadoAlunos', 'ℹ️ Nenhum aluno para excluir', 'info');
+                return;
+            }
+            
+            const aluno = alunos.pop();
+            mostrarResultado('resultadoAlunos', `✅ Aluno excluído! Nome: ${aluno.nome}`, 'success');
+            atualizarStatus();
+        }
+        
+        // Testes de Treinos
+        function testarCriarTreino() {
+            const alunoId = document.getElementById('alunoIdTreino').value;
+            const titulo = document.getElementById('tituloTreino').value;
+            const texto = document.getElementById('textoTreino').value;
+            
+            if (!alunoId || !titulo) {
+                mostrarResultado('resultadoTreinos', '❌ Preencha aluno ID e título!', 'error');
+                return;
+            }
+            
+            const treino = {
+                id: nextId++,
+                aluno_id: alunoId,
+                titulo: titulo,
+                texto: texto,
+                atualizado_em: new Date().toISOString()
+            };
+            
+            treinos.push(treino);
+            mostrarResultado('resultadoTreinos', `✅ Treino criado com sucesso! ID: ${treino.id}`, 'success');
+            atualizarStatus();
+            
+            // Limpar campos
+            document.getElementById('alunoIdTreino').value = '';
+            document.getElementById('tituloTreino').value = '';
+            document.getElementById('textoTreino').value = '';
+        }
+        
+        function testarBuscarTreinos() {
+            if (treinos.length === 0) {
+                mostrarResultado('resultadoTreinos', 'ℹ️ Nenhum treino cadastrado', 'info');
+                return;
+            }
+            
+            const lista = treinos.map(t => `ID: ${t.id} - ${t.titulo} (Aluno: ${t.aluno_id})`).join('<br>');
+            mostrarResultado('resultadoTreinos', `<strong>Treinos cadastrados:</strong><br>${lista}`, 'success');
+        }
+        
+        function testarEditarTreino() {
+            if (treinos.length === 0) {
+                mostrarResultado('resultadoTreinos', 'ℹ️ Nenhum treino para editar', 'info');
+                return;
+            }
+            
+            const treino = treinos[0];
+            treino.titulo = treino.titulo + ' (editado)';
+            treino.atualizado_em = new Date().toISOString();
+            mostrarResultado('resultadoTreinos', `✅ Treino editado! Novo título: ${treino.titulo}`, 'success');
+        }
+        
+        function testarExcluirTreino() {
+            if (treinos.length === 0) {
+                mostrarResultado('resultadoTreinos', 'ℹ️ Nenhum treino para excluir', 'info');
+                return;
+            }
+            
+            const treino = treinos.pop();
+            mostrarResultado('resultadoTreinos', `✅ Treino excluído! Título: ${treino.titulo}`, 'success');
+            atualizarStatus();
+        }
+        
+        function testarDuplicarTreino() {
+            if (treinos.length === 0) {
+                mostrarResultado('resultadoTreinos', 'ℹ️ Nenhum treino para duplicar', 'info');
+                return;
+            }
+            
+            const original = treinos[0];
+            const duplicado = {
+                id: nextId++,
+                aluno_id: original.aluno_id,
+                titulo: original.titulo + ' (cópia)',
+                texto: original.texto,
+                atualizado_em: new Date().toISOString()
+            };
+            
+            treinos.push(duplicado);
+            mostrarResultado('resultadoTreinos', `✅ Treino duplicado! ID: ${duplicado.id}`, 'success');
+            atualizarStatus();
+        }
+        
+        // Teste de Filtros
+        function testarFiltros() {
+            const busca = document.getElementById('buscaTeste').value.toLowerCase();
+            const status = document.getElementById('statusTeste').value;
+            
+            let resultado = alunos;
+            
+            if (busca) {
+                resultado = resultado.filter(a => a.nome.toLowerCase().includes(busca));
+            }
+            
+            if (status) {
+                // Simulação de status baseado na data de vencimento
+                const hoje = new Date();
+                resultado = resultado.filter(a => {
+                    const venc = new Date(a.vencimento);
+                    if (status === 'VENCIDO') return venc < hoje;
+                    if (status === 'VENCE_EM_7') {
+                        const diff = Math.ceil((venc - hoje) / (1000 * 60 * 60 * 24));
+                        return diff <= 7 && diff > 0;
+                    }
+                    return venc > hoje;
+                });
+            }
+            
+            if (resultado.length === 0) {
+                mostrarResultado('resultadoFiltros', 'ℹ️ Nenhum resultado encontrado', 'info');
+            } else {
+                const lista = resultado.map(a => `${a.nome} (${a.vencimento})`).join('<br>');
+                mostrarResultado('resultadoFiltros', `<strong>Resultados (${resultado.length}):</strong><br>${lista}`, 'success');
+            }
+        }
+        
+        // Inicialização
+        window.onload = function() {
+            atualizarStatus();
+            // Definir data padrão para hoje
+            const hoje = new Date();
+            const amanha = new Date(hoje);
+            amanha.setDate(hoje.getDate() + 30);
+            
+            document.getElementById('nascAluno').value = hoje.toISOString().split('T')[0];
+            document.getElementById('vencAluno').value = amanha.toISOString().split('T')[0];
+        };
+    </script>
+</body>
+</html>
+
+
